@@ -1,10 +1,9 @@
 import {createSlice, configureStore} from '@reduxjs/toolkit';
-
-const initialState = {isAuth : false, isAdmin : false, user : null}
+const initialAuthState = {isAuth : false, isAdmin : false, user : null}
 
 const authSlice = createSlice({
     name: 'auth-slice',
-    initialState,
+    initialState : initialAuthState,
     reducers : {
         login(state, action) {
             state.isAuth = action.payload.isAuth;
@@ -21,10 +20,37 @@ const authSlice = createSlice({
     }
 });
 
-const store = configureStore({
-    reducer: authSlice.reducer
+const initialFlightState = {flightId : 0};
+
+const flightSlice = createSlice({
+    name: 'flight-slice',
+    initialState : initialFlightState,
+    reducers : {
+        setFlightState(state , action) {
+             state.flightId = action.payload.flightId;   
+             console.log(state.flightId);
+        },
+    },
 });
 
-export const authActions = authSlice.actions;
+const initialPackageState = {pack : ""}
 
+const packageSlice = createSlice({
+    name : 'package-slice',
+    initialState : initialPackageState ,
+    reducers : {
+        setPackageState(state, action) {
+            state.pack = action.payload.pack;
+            console.log(action.payload.pack);
+        }
+    }
+})
+
+const store = configureStore({
+    reducer: {auth : authSlice.reducer, flight: flightSlice.reducer, package: packageSlice.reducer},
+});
+
+export const packageActions = packageSlice.actions;
+export const authActions = authSlice.actions;
+export const flightActions = flightSlice.actions;
 export default store;
