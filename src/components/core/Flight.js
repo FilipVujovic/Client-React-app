@@ -60,6 +60,9 @@ const Flight = (props) => {
     case "Belgrade":
       imageLink = imageLinks.belgrade;
       break;
+    case "Munich":
+      imageLink = imageLinks.munich;
+      break;
     default:
       imageLink = "";
   }

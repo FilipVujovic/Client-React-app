@@ -16,10 +16,7 @@ import { useSelector } from "react-redux";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
+      {'Copyright © Jakarta Air '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -82,13 +79,15 @@ export default function Checkout() {
     const [seats, setSeats] = useState([]);
     const user = useSelector((state) => state.auth.user);
     const pack = useSelector((state) => state.package.pack)
+    const flightId = useSelector((state) => state.flight.flightId)
     useEffect(() => {
         getSeats();
+        console.log(seats);
       }, []);
 
 
     const getSeats = () => {
-        fetch("http://localhost:9000/seatsbyflight/" + 1, {
+        fetch("http://localhost:9000/seatsbyflight/" + flightId, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",

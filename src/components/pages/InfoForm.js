@@ -27,8 +27,10 @@ export default function AddressForm() {
   const [seats, setSeats] = useState([]);
 
   useEffect(() => {
+
     getPackages();
     getSeats();
+    console.log(seats);
   }, []);
 
   //Request with get head can not have a body

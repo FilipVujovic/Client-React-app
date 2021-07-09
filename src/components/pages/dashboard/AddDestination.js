@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useAlert } from "react-alert";
+import ExploreIcon from "@material-ui/icons/Explore";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -45,6 +46,13 @@ export default function AddDestinationForm() {
         city : city.current.value,
         countryCode : countryCode.current.value
     };
+
+    if(destinationInfo.airportCode === "" || destinationInfo.airportFullName === "" || destinationInfo.city === "" || destinationInfo.countryCode === "") {
+      alert.show("Please provide all required data!", {
+        title: "Error!",
+      });
+      return;
+    }
     fetch("http://localhost:9000/add-destination" , {
         method: "POST",
         body: JSON.stringify(destinationInfo),
@@ -69,12 +77,12 @@ export default function AddDestinationForm() {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <ExploreIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Add Destination
         </Typography>
-        <form className={classes.form} noValidate onSubmit = {submitDestination}>
+        <form className={classes.form}  onSubmit = {submitDestination}>
           <TextField
             variant="outlined"
             margin="normal"

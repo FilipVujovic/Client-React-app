@@ -13,12 +13,15 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import FlightOutlinedIcon from "@material-ui/icons/FlightOutlined";
 import AddFlightForm from "./AddFlightForm";
-import { useHistory } from 'react-router-dom';
-import HomeIcon from '@material-ui/icons/Home';
-import ExploreIcon from '@material-ui/icons/Explore';
-import AddDestinationForm from './AddDestination';
-import DeleteIcon from '@material-ui/icons/Delete';
-import DeleteFlights from './DeleteFlights'
+import { useHistory } from "react-router-dom";
+import HomeIcon from "@material-ui/icons/Home";
+import ExploreIcon from "@material-ui/icons/Explore";
+import AddDestinationForm from "./AddDestination";
+import DeleteIcon from "@material-ui/icons/Delete";
+import DeleteFlights from "./DeleteFlights";
+import AllTickets from "./AllTickets";
+import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
+import UpdateFlight from './UpdateFlight';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -98,13 +101,17 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  dashboard: {
+    textAlign: "center",
+    fontSize: "3rem"
+  }
 }));
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const history = useHistory();
-  const [buttonAction, setButtonAction] = useState();
+  const [buttonAction, setButtonAction] = useState(0);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -118,10 +125,18 @@ export default function Dashboard() {
 
   const destinationClickHandler = () => {
     setButtonAction(2);
-  }
+  };
 
   const flightDeleteClickHandler = () => {
     setButtonAction(3);
+  };
+
+  const ticketClickHandler = () => {
+    setButtonAction(4);
+  };
+
+  const flightUpdateClickHandler = () => {
+    setButtonAction(5);
   }
 
   return (
@@ -163,30 +178,50 @@ export default function Dashboard() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-        <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
         <Divider />
-        <Button onClick = {() => {history.push('/')}}>
+        <Button
+          onClick={() => {
+            history.push("/");
+          }}
+        >
           <HomeIcon className={classes.icon} />
+          {open && (<p>Home</p>)}
+        </Button>
+        <Button onClick={ticketClickHandler}>
+          <ConfirmationNumberIcon className={classes.icon} />
+          {open && (<p>All tickets</p>)}
         </Button>
         <Button onClick={flightClickHandler}>
-          <FlightOutlinedIcon className={classes.icon}/>
+          <FlightOutlinedIcon className={classes.icon} />
+          {open && (<p>Add Flight</p>)}
+        </Button>
+        <Button onClick={flightUpdateClickHandler}>
+          <FlightOutlinedIcon className={classes.icon} />
+          {open && (<p>Update Flight</p>)}
         </Button>
         <Button onClick={destinationClickHandler}>
-          <ExploreIcon className={classes.icon}/>
+          <ExploreIcon className={classes.icon} />
+          {open && (<p>Add Destination</p>)}
         </Button>
         <Button onClick={flightDeleteClickHandler}>
-          <DeleteIcon className={classes.icon}/>
+          <DeleteIcon className={classes.icon} />
+          {open && (<p>Delete Flight</p>)}
         </Button>
+      
         <Divider />
       </Drawer>
       <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
-               {buttonAction === 1 && (<AddFlightForm />)} 
-               {buttonAction === 2 && (<AddDestinationForm/>)}
-               {buttonAction === 3 && (<DeleteFlights/>)}
+        <div className={classes.appBarSpacer} />
+        {buttonAction === 0 && <h1 className = {classes.dashboard}>Admin Dashboard</h1>}
+        {buttonAction === 1 && <AddFlightForm />}
+        {buttonAction === 2 && <AddDestinationForm />}
+        {buttonAction === 3 && <DeleteFlights />}
+        {buttonAction === 4 && <AllTickets />}
+        {buttonAction === 5 && <UpdateFlight/> }
       </main>
     </div>
   );

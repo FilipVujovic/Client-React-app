@@ -1,22 +1,23 @@
-import {React, useRef } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import {useHistory} from 'react-router-dom';
+import { React, useRef } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright @ Jakarta Air '}
+      {"Copyright @ Jakarta Air "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -24,17 +25,17 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(5),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    blockSize: '50%'
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    blockSize: "50%",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '75%', // Fix IE 11 issue.
+    width: "75%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
@@ -44,14 +45,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-  const firstName = useRef('');
-  const lastName = useRef('');
-  const password = useRef('');
-  const jmbg = useRef('');
-  const adress = useRef('');
-  const email = useRef('');
-  const contact = useRef('');
+  const firstName = useRef("");
+  const lastName = useRef("");
+  const password = useRef("");
+  const jmbg = useRef("");
+  const adress = useRef("");
+  const email = useRef("");
+  const contact = useRef("");
   const history = useHistory();
+  const alert = useAlert();
+
 
   async function addUser(event) {
     event.preventDefault();
@@ -62,19 +65,36 @@ export default function SignUp() {
       adress: adress.current.value,
       contact: contact.current.value,
       email: email.current.value,
-      password: password.current.value
-  }
-    const response = await fetch('http://localhost:9000/signup', {
-      method: 'POST',
+      password: password.current.value,
+    };
+
+    if (
+      user.firstName === "" ||
+      user.lastName === "" ||
+      user.jmbg === "" ||
+      user.adress === "" ||
+      user.contact === "" ||
+      user.email === "" ||
+      user.password === ""
+    ) {
+      alert.show("Please provide all required data!", {
+        title: "Invalid input!",
+      });
+      return;
+    }
+
+    const response = await fetch("http://localhost:9000/signup", {
+      method: "POST",
       body: JSON.stringify(user),
       headers: {
-        'Content-Type' : 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
-    if(response.ok) history.push('/');
-  };
+    if (response.ok) history.push("/");
+  }
+
   return (
-    <Container component="main" maxWidth="xs" maxHeight = "50%">
+    <Container component="main" maxWidth="xs" maxHeight="50%">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -83,7 +103,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate onSubmit = {addUser}>
+        <form className={classes.form} noValidate onSubmit={addUser}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -95,7 +115,7 @@ export default function SignUp() {
                 id="firstName"
                 label="First Name"
                 autoFocus
-                inputRef = {firstName}
+                inputRef={firstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -107,7 +127,7 @@ export default function SignUp() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
-                inputRef = {lastName}
+                inputRef={lastName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -119,7 +139,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                inputRef = {email}
+                inputRef={email}
               />
             </Grid>
             <Grid item xs={12}>
@@ -132,7 +152,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                inputRef = {password}
+                inputRef={password}
               />
             </Grid>
             <Grid item xs={12}>
@@ -144,7 +164,7 @@ export default function SignUp() {
                 label="JMBG"
                 id="JMBG"
                 autoComplete="JMBG"
-                inputRef = {jmbg}
+                inputRef={jmbg}
               />
             </Grid>
             <Grid item xs={12}>
@@ -156,7 +176,7 @@ export default function SignUp() {
                 label="Address"
                 id="address"
                 autoComplete="address"
-                inputRef = {adress}
+                inputRef={adress}
               />
             </Grid>
             <Grid item xs={12}>
@@ -168,7 +188,7 @@ export default function SignUp() {
                 label="Contact"
                 id="contact"
                 autoComplete="contact"
-                inputRef = {contact}
+                inputRef={contact}
               />
             </Grid>
           </Grid>

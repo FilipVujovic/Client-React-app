@@ -1,10 +1,10 @@
-import { Fragment, useState, useEffect  } from "react";
+import { Fragment, useState, useEffect, useRef  } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { DataGrid } from "@material-ui/data-grid";
 import Typography from "@material-ui/core/Typography";
 import { Button } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { useAlert } from "react-alert";
+import TextField from "@material-ui/core/TextField";
 const useStyles = makeStyles((theme) => ({
   root: {},
   heroContent: {
@@ -52,6 +52,14 @@ export default function Flights() {
   const classes = useStyles();
   const [flights, setFlights] = useState([]);
   const [select, setSelection] = useState();
+  const depDate = useRef();
+  const depTime = useRef();
+  const ariDate = useRef();
+  const ariTime = useRef();
+  const depCity = useRef();
+  const depAirport = useRef();
+  const airplaneId = useRef();
+  const destinationId = useRef();
   const alert = useAlert();
   useEffect(() => {
     getFlights();
@@ -85,26 +93,34 @@ export default function Flights() {
   getFlights();
  }
 
-  const clickHandler = (event) => {
+  const submitForm = (event) => {
       event.preventDefault();
-      const selectInfo = {
-        id: select
-      }
-      if(selectInfo.id === undefined) {
+      const flightInfo = {
+        id: select,
+        departureDate: depDate.current.value,
+        departureTime: depTime.current.value,
+        arrivalDate: ariDate.current.value,
+        arrivalTime: ariTime.current.value,
+        departureAirport: depAirport.current.value,
+        airplaneId: airplaneId.current.value,
+        destinationId: destinationId.current.value,
+        departureCity: depCity.current.value,
+      };
+      if(flightInfo.id === undefined) {
         alert.show("Please select a row!", {
           title: "Error!",
         });
       }
-        fetch('http://localhost:9000/deleteFlight', {
-          method: 'DELETE',
+        fetch('http://localhost:9000/updateFlight', {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
-          body : JSON.stringify(selectInfo)
+          body : JSON.stringify(flightInfo)
         }).then((response) => {
           if(response.status === 200) {
             reload();
-            alert.show("Flight deleted successfully!", {
+            alert.show("Flight updated successfully!", {
               title: "Success!",
             });
           } else {
@@ -128,7 +144,7 @@ export default function Flights() {
   return (
     <Fragment>
       <Typography component="h1" variant="h5" className={classes.title}>
-        Delete Flight
+        Update Flight
       </Typography>
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
@@ -139,9 +155,98 @@ export default function Flights() {
           onRowSelected = {e => setSelection(e.data.id)}
         />
       </div>
-      <Button onClick={clickHandler}>
-        <DeleteIcon className={classes.icon} />
-      </Button>
+      <form onSubmit = {submitForm}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="dep date"
+            label="Departure Date"
+            name="departure date"
+            autoComplete="departure date"
+            inputRef={depDate}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="departure time"
+            label="Departure Time"
+            id="dep time"
+            inputRef={depTime}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="arrival date"
+            label="Arrival Date"
+            id="ari date"
+            inputRef={ariDate}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="arrival time"
+            label="Arrival Time"
+            id="ari time"
+            inputRef={ariTime}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="dep city"
+            label="Departure City"
+            id="dep city"
+            inputRef={depCity}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="departure airport"
+            label="Departure Airport"
+            id="dep airport"
+            inputRef={depAirport}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="airplane id"
+            label="Airplane Id"
+            id="airplaneId"
+            inputRef={airplaneId}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="destination id"
+            label="Destination Id"
+            id="destId"
+            inputRef={destinationId}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Submit
+          </Button>
+        </form>
     </Fragment>
   );
 }

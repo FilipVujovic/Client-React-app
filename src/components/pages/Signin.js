@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { authActions } from "../../global/global-state";
 import { useDispatch } from "react-redux";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -60,6 +61,14 @@ export default function SignIn() {
       email: email.current.value,
       password: password.current.value,
     };
+    if(loginInfo.email === '' || loginInfo.password === '') {
+      console.log(loginInfo.email.split("@"));
+      alert.show("Please enter all required data!", {
+        title: "Incorrect input!",
+      });
+      return;
+    }
+
     const response = await fetch("http://localhost:9000/login", {
       method: "POST",
       body: JSON.stringify(loginInfo),
@@ -102,6 +111,7 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
+            type="email"
             id="email"
             label="Email Address"
             name="email"
